@@ -1,0 +1,41 @@
+import ElPadrino.*
+describe "Padrino" {
+	
+	const cuerda1 = new CuerdaDePiano(tensa = true)
+	const cuerda2 = new CuerdaDePiano(tensa = true)
+	const cuerda3 = new CuerdaDePiano(tensa = true)
+	const cuerda4 = new CuerdaDePiano(tensa = true)
+	const revolver = new Revolver(balas = 6)
+	const revolver2 = new Revolver(balas = 6)
+	const revolver3 = new Revolver(balas = 6)
+	
+
+	const juancito = new Mafioso(rango = don)
+	const fabrizio = new Mafioso(rango = subjefe, armas = [cuerda2,cuerda3,cuerda4])
+	const pedro = new Mafioso(rango = don)
+	const juancho = new Mafioso(rango = soldado, armas = [cuerda1])
+	const sicilia = new Familia(miembros = [juancito,pedro,fabrizio])
+
+method initialize(){
+	juancho.trabajar(pedro)
+}
+	test "Don esta muerto" {
+		assert.notThat(pedro.estaVivo())
+	}
+		test "Nadie asciende a Don" {
+		assert.throwsExceptionWithMessage("Hay un Don vivo", {sicilia.luto()})
+	}
+
+	test "asciende a Don" {
+		juancho.trabajar(juancito)
+		sicilia.luto()
+		assert.equals(fabrizio.rango(), don)
+	}
+	test "asciende tiziano" {
+		const tiziano = new Mafioso(rango = subjefe, armas = [revolver,revolver2,revolver3])
+		sicilia.agregarFamiliar(tiziano)
+		juancho.trabajar(juancito)
+		sicilia.luto()
+		assert.equals(tiziano.rango(), don)
+	}
+}
